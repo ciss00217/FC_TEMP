@@ -3,7 +3,7 @@
   <groupId>com.ibm</groupId>
   <artifactId>FCB_Automation</artifactId>
   <versioning>
-    <lastUpdated>20240523024715</lastUpdated>
+    <lastUpdated>20240523055355</lastUpdated>
     <snapshot>
       <localCopy>true</localCopy>
     </snapshot>
@@ -11,7 +11,7 @@
       <snapshotVersion>
         <extension>pom</extension>
         <value>0.0.1-SNAPSHOT</value>
-        <updated>20240523024715</updated>
+        <updated>20240523055355</updated>
       </snapshotVersion>
     </snapshotVersions>
   </versioning>
