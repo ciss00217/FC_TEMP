@@ -96,7 +96,7 @@ namespace ETLAdm.accessories
 					OracleCommand command = connection.CreateCommand();
 					String sql = "Select TIMESTAMP, CMDM.ID_DEC(CUST_ID) as CUST_ID, CMDM.ACC_DEC(ACC_NO) as ACC_NO, CMDM.CARD_DEC(CARD_NO) as CARD_NO, RESV1, RESV2, RESV3, " +
 						" RESV5, RESV6, RESV7, RESV8, RESV9, RESV10 From CMAUTO_AP.MKT_CAMP_SAMPLE " +
-					  "Where CAMPAIGNOWNER = SUBSTRING('" + loginID + "', 1,3) And CAMP_CODE = '"
+					  "Where CAMPAIGNOWNER = SUBSTR('" + loginID + "', 1,3) And CAMP_CODE = '"
 					  + campaigncode + "' And CELL_CODE = '" + cellcode + "' order by TIMESTAMP desc";// 
 					_log.Debug("sql:" + sql);
 					command.CommandText = sql;
