@@ -39,7 +39,8 @@ namespace ETLAdm.accessories
 						//Console.WriteLine("ConnectionString: {0}", connection.ConnectionString);
 
 						OracleCommand activityCommand = connection.CreateCommand();
-						String activitySql = "Select DISTINCT (CAMP_CODE||CAMPAIGNNAME),CAMP_CODE,CAMPAIGNNAME From CMAUTO_AP.MKT_CAMP_SAMPLE Where CAMPAIGNOWNER ='" + loginID.Substring(0,3) + "'";// 
+                        String activitySql = "Select DISTINCT (CAMP_CODE||CAMPAIGNNAME),CAMP_CODE,CAMPAIGNNAME From CMAUTO_AP.MKT_CAMP_SAMPLE Where CAMPAIGNOWNER LIKE '00" + loginIDInt + "%'";
+
 						_log.Debug("activitySql:" + activitySql);
 						activityCommand.CommandText = activitySql;
 						OracleDataReader activityReader = activityCommand.ExecuteReader();
@@ -53,7 +54,7 @@ namespace ETLAdm.accessories
 							MarketingActtivityList.Items.Add(listItem);
 						}
 						OracleCommand audienceCommand = connection.CreateCommand();
-						String audienceSql = "Select DISTINCT (CELL_CODE||CELLNAME),CELL_CODE,CELLNAME,CAMP_CODE From CMAUTO_AP.MKT_CAMP_SAMPLE Where CAMPAIGNOWNER ='" + loginID.Substring(0,3) + "'";//
+                        String audienceSql = "Select DISTINCT (CELL_CODE||CELLNAME),CELL_CODE,CELLNAME,CAMP_CODE From CMAUTO_AP.MKT_CAMP_SAMPLE Where CAMPAIGNOWNER LIKE '00" + loginIDInt + "%'";
 						_log.Debug("audienceSql:" + audienceSql);
 						audienceCommand.CommandText = audienceSql;
 						OracleDataReader audienceReader = audienceCommand.ExecuteReader();
@@ -94,10 +95,8 @@ namespace ETLAdm.accessories
 					//Console.WriteLine("ConnectionString: {0}", connection.ConnectionString);
 
 					OracleCommand command = connection.CreateCommand();
-					String sql = "Select TIMESTAMP, CMDM.ID_DEC(CUST_ID) as CUST_ID, CMDM.ACC_DEC(ACC_NO) as ACC_NO, CMDM.CARD_DEC(CARD_NO) as CARD_NO, RESV1, RESV2, RESV3, " +
-						" RESV5, RESV6, RESV7, RESV8, RESV9, RESV10 From CMAUTO_AP.MKT_CAMP_SAMPLE " +
-					  "Where CAMPAIGNOWNER = SUBSTR('" + loginID + "', 1,3) And CAMP_CODE = '"
-					  + campaigncode + "' And CELL_CODE = '" + cellcode + "' order by TIMESTAMP desc";// 
+                    String sql = "Select TIMESTAMP, CMDM.ID_DEC(CUST_ID) as CUST_ID, CMDM.ACC_DEC(ACC_NO) as ACC_NO, CMDM.CARD_DEC(CARD_NO) as CARD_NO, RESV1, RESV2, RESV3, RESV4, RESV5, RESV6, RESV7, RESV8, RESV9, RESV10 From CMAUTO_AP.MKT_CAMP_SAMPLE Where CAMPAIGNOWNER LIKE '00" + loginIDInt + "%' And CAMP_CODE = '" + campaigncode + "' And CELL_CODE = '" + cellcode + "' order by TIMESTAMP desc";
+
 					_log.Debug("sql:" + sql);
 					command.CommandText = sql;
 					OracleDataReader reader = command.ExecuteReader();
