@@ -154,7 +154,7 @@ namespace ETLAdm.accessories
 
 					}
 					OracleCommand audienceCommand = connection.CreateCommand();
-					String audienceSql = "Select DISTINCT (CELL_CODE||CELLNAME),CELL_CODE,CELLNAME,CAMP_CODE From CMAUTO_AP.MKT_CAMP_SAMPLE Where CAMPAIGNOWNER ='" + loginID.Substring(0,3) + "'";//
+					String audienceSql = "Select DISTINCT (CELL_CODE||CELLNAME),CELL_CODE,CELLNAME,CAMP_CODE From CMAUTO_AP.MKT_CAMP_SAMPLE Where CAMPAIGNOWNER LIKE '00" + loginIDInt + "%'";//
 					_log.Debug("audienceSql:" + audienceSql);
 					audienceCommand.CommandText = audienceSql;
 					OracleDataReader audienceReader = audienceCommand.ExecuteReader();
