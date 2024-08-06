@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -180,42 +181,60 @@ namespace ETLAdm.accessories
 			}
 
 		}
-		protected string getCMAUTOConnString()
+
+        protected static string DecodeBase64(string encodedValue)
+        {
+            byte[] base64EncodedBytes = Convert.FromBase64String(encodedValue);
+            return Encoding.UTF8.GetString(base64EncodedBytes);
+        }
+
+        protected static string EncodeBase64(string value)
+        {
+            byte[] plainTextBytes = Encoding.UTF8.GetBytes(value);
+            return Convert.ToBase64String(plainTextBytes);
+        }
+
+        protected static Dictionary<string, string> ReadPropertiesFile(string filePath)
+        {
+            var properties = new Dictionary<string, string>();
+
+            foreach (var line in File.ReadLines(filePath))
+            {
+                // 忽略空行和注釋行
+                if (string.IsNullOrWhiteSpace(line) || line.StartsWith("#"))
+                    continue;
+
+                var delimiterIndex = line.IndexOf('=');
+                if (delimiterIndex == -1)
+                    continue;
+
+                var key = line.Substring(0, delimiterIndex).Trim();
+                var value = line.Substring(delimiterIndex + 1).Trim().Trim('"');
+
+                properties[key] = value;
+            }
+
+            return properties;
+        }
+        protected string getCMAUTOConnString()
 		{
-            string filePath = "D:/test/settingCMDM_CMAUTO_AP.txt";
-            string connString ="";
 
-            try
-            {
-                // 讀取檔案的第一行
-                 connString = File.ReadLines(filePath).First();
+            string connString = "";
 
-                // 印出第一行
-                _log.Debug("getCMAUTOConnString: " + connString);
-            }
-            catch (FileNotFoundException)
-            {
-                _log.Error("找不到檔案: " + filePath);
+            string filePath = "D:/IBM/IBMETL/ETLAdm/ETL_Manager.properties";
+            Dictionary<string, string> properties = ReadPropertiesFile(filePath);
 
-            }
-            catch (IOException e)
-            {
-                _log.Error("讀取檔案時發生錯誤: " + e.Message);
-            }
-            catch (Exception e)
-            {
-                _log.Error("發生未預期的錯誤: " + e.Message);
-           
-            }
-            //string settingValue = ConfigurationManager.AppSettings["YourSettingKey"];
-            //Console.WriteLine("Value of YourSettingKey: " + settingValue);
-			//
-			//
-            //DBConfig cfg = new ConfigBO().selectDBConfigByVarName("CMDM_CMAUTO_AP");
-			//string[] serverIp = cfg.cfgServer.VAR_VALUE.Split(':');
-			//string connString = "Data Source=" + cfg.root.VAR_VALUE + ";Persist Security Info=True;User ID=" + cfg.cfgUser.VAR_VALUE + ";Password=" + cfg.cfgPwd.VAR_VALUE + ";";
-			//Console.WriteLine(connString);
-			return connString;
+            string settingCMDM_CMAUTO_AP = "";
+            properties.TryGetValue("settingCMDM_CMAUTO_AP", out settingCMDM_CMAUTO_AP);
+
+            Console.WriteLine($"{DecodeBase64(settingCMDM_CMAUTO_AP)}");
+
+
+            connString = DecodeBase64(settingCMDM_CMAUTO_AP);
+
+
+            return connString;
+
 		}
 	}
 }
